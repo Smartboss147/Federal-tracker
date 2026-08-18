@@ -1,0 +1,16 @@
+{
+  "entities": {
+    "trackers": {
+      "title": "Tracker Data",
+      "description": "User funds tracking sessions and submissions",
+      "fields": {
+        "userId": { "type": "string", "description": "User ID" },
+        "step": { "type": "number", "description": "Current step in the tracker flow" },
+        "incidentInfo": { "type": "object", "description": "User and incident information" },
+        "planId": { "type": "string", "description": "Selected tracking plan ID" },
+        "startTime": { "type": "number", "description": "Timestamp when tracking started" },
+        "updatedAt": { "type": "string", "description": "Last updated ISO string" }
+      }
+    }
+  }
+}
