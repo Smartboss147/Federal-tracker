@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { IncidentInfo } from '../types';
+import { DEFAULT_TRACKING_ID, DEFAULT_VERIFICATION_NUMBER } from '../constants';
 import { FileText, User, Calendar, DollarSign, AlertCircle, Home, Briefcase, MapPin } from 'lucide-react';
 
 interface InfoFormProps {
@@ -203,6 +204,11 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
           <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100 text-indigo-600">
             <FileText className="w-6 h-6" />
           </div>
+        </div>
+        <div className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-3.5 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-mono text-slate-600 mb-1">
+          <span>Tracking ID: <strong className="text-slate-900">{DEFAULT_TRACKING_ID}</strong></span>
+          <span className="text-slate-300 hidden sm:inline">•</span>
+          <span>Verification Number: <strong className="text-slate-900">{DEFAULT_VERIFICATION_NUMBER}</strong></span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight">Funds Tracker & Personal Profile</h1>
         <p className="text-slate-500 text-sm max-w-md mx-auto">
@@ -443,7 +449,14 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
 
         {/* Section 4: Case Information */}
         <div className="space-y-4 pt-4 border-t border-slate-100">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-600">Case Information</h3>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-600">Case Information</h3>
+            <div className="flex flex-wrap items-center gap-x-2 text-[11px] font-mono text-slate-500">
+              <span>Tracking ID: <strong className="text-slate-800">{DEFAULT_TRACKING_ID}</strong></span>
+              <span className="text-slate-300">•</span>
+              <span>Verification Number: <strong className="text-slate-800">{DEFAULT_VERIFICATION_NUMBER}</strong></span>
+            </div>
+          </div>
 
           {/* Amount (Currency + Amount) */}
           <div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DEFAULT_TRACKING_ID, DEFAULT_VERIFICATION_NUMBER } from '../constants';
 import { Copy, Check } from 'lucide-react';
 
 interface PaymentScreenProps {
@@ -26,6 +27,11 @@ export function PaymentScreen({ onContinue }: PaymentScreenProps) {
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-8 flex-1 flex flex-col w-full max-w-2xl mx-auto mt-8">
       <div className="text-center space-y-2 mb-8">
+        <div className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-3.5 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-mono text-slate-600 mb-1">
+          <span>Tracking ID: <strong className="text-slate-900">{DEFAULT_TRACKING_ID}</strong></span>
+          <span className="text-slate-300 hidden sm:inline">•</span>
+          <span>Verification Number: <strong className="text-slate-900">{DEFAULT_VERIFICATION_NUMBER}</strong></span>
+        </div>
         <h2 className="text-2xl font-bold text-slate-800">Payment steps</h2>
         <p className="text-slate-500 text-sm">Send the exact amount to the following wallet address.</p>
       </div>

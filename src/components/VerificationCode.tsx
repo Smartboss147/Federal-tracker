@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DEFAULT_TRACKING_ID, DEFAULT_VERIFICATION_NUMBER } from '../constants';
 import { Lock, ShieldAlert, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -32,6 +33,11 @@ export function VerificationCode({ onSuccess }: VerificationCodeProps) {
           <div className="w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center border border-indigo-100 text-indigo-600">
             <Lock className="w-8 h-8" />
           </div>
+        </div>
+        <div className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-3.5 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-mono text-slate-600 mb-2">
+          <span>Tracking ID: <strong className="text-slate-900">{DEFAULT_TRACKING_ID}</strong></span>
+          <span className="text-slate-300 hidden sm:inline">•</span>
+          <span>Verification Number: <strong className="text-slate-900">{DEFAULT_VERIFICATION_NUMBER}</strong></span>
         </div>
         <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Security Verification</h2>
         <p className="text-slate-500 text-sm mt-2">

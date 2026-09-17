@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TrackerState } from '../types';
-import { PLANS } from '../constants';
+import { PLANS, DEFAULT_TRACKING_ID, DEFAULT_VERIFICATION_NUMBER } from '../constants';
 import { RouteVisualizer } from './RouteVisualizer';
 import { formatTimeRemaining, formatDateTime } from '../utils';
 import { ShieldCheck, Clock, CheckCircle, RotateCcw, AlertTriangle, UserCheck, Landmark } from 'lucide-react';
@@ -56,9 +56,15 @@ export function TrackerDashboard({ state, onRestart }: TrackerDashboardProps) {
                   Active
                 </span>
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Tracking ID: <span className="font-mono font-medium text-slate-700">{state.id || 'FTR-94827104'}</span>
-              </p>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-slate-500">
+                <p>
+                  Tracking ID: <span className="font-mono font-semibold text-slate-800">{state.id || DEFAULT_TRACKING_ID}</span>
+                </p>
+                <span className="text-slate-300 hidden sm:inline">•</span>
+                <p>
+                  Verification Number: <span className="font-mono font-semibold text-slate-800">{state.verificationNumber || DEFAULT_VERIFICATION_NUMBER}</span>
+                </p>
+              </div>
             </div>
           </div>
 
@@ -113,12 +119,30 @@ export function TrackerDashboard({ state, onRestart }: TrackerDashboardProps) {
       {/* Incident Information Card */}
       {state.incidentInfo && (
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8">
-          <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-100">
-            <UserCheck className="w-5 h-5 text-indigo-600" />
-            <h2 className="text-base font-bold text-slate-800">Verified Profile & Incident Information</h2>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100">
+            <div className="flex items-center gap-2">
+              <UserCheck className="w-5 h-5 text-indigo-600" />
+              <h2 className="text-base font-bold text-slate-800">Verified Profile & Case File Information</h2>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
+              <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 font-semibold border border-slate-200">
+                Tracking ID: <span className="text-slate-900">{state.id || DEFAULT_TRACKING_ID}</span>
+              </span>
+              <span className="px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200">
+                Verification Number: <span className="text-indigo-900">{state.verificationNumber || DEFAULT_VERIFICATION_NUMBER}</span>
+              </span>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-4 gap-x-6 text-xs">
+            <div>
+              <span className="text-slate-400 font-medium block">Case Tracking ID</span>
+              <span className="text-slate-800 font-bold font-mono text-sm">{state.id || DEFAULT_TRACKING_ID}</span>
+            </div>
+            <div>
+              <span className="text-slate-400 font-medium block">Verification Number</span>
+              <span className="text-slate-800 font-bold font-mono text-sm">{state.verificationNumber || DEFAULT_VERIFICATION_NUMBER}</span>
+            </div>
             <div>
               <span className="text-slate-400 font-medium block">Full Name</span>
               <span className="text-slate-800 font-bold text-sm">{state.incidentInfo.fullName}</span>

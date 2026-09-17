@@ -1,5 +1,8 @@
 import { Plan } from './types';
 
+export const DEFAULT_TRACKING_ID = 'FBI-INTL-0926-874512';
+export const DEFAULT_VERIFICATION_NUMBER = 'VCN-473829';
+
 export const PLANS: Plan[] = [
   {
     id: 'fast',

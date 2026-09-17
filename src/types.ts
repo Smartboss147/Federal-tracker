@@ -21,6 +21,7 @@ export interface IncidentInfo {
 
 export interface TrackerState {
   id?: string;
+  verificationNumber?: string;
   userId?: string;
   step: 0 | 1 | 2 | 3 | 4 | 5;
   incidentInfo?: IncidentInfo;

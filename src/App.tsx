@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TrackerState, IncidentInfo } from './types';
+import { DEFAULT_TRACKING_ID, DEFAULT_VERIFICATION_NUMBER } from './constants';
 import { InfoForm } from './components/InfoForm';
 import { PlanSelector } from './components/PlanSelector';
 import { PaymentScreen } from './components/PaymentScreen';
@@ -11,6 +12,8 @@ import { ShieldCheck, RotateCcw, Landmark } from 'lucide-react';
 const STORAGE_KEY = 'federal_funds_tracker_state';
 
 const initialState: TrackerState = {
+  id: DEFAULT_TRACKING_ID,
+  verificationNumber: DEFAULT_VERIFICATION_NUMBER,
   step: 0,
   planId: null,
   startTime: null,
@@ -21,7 +24,12 @@ export function App() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        return {
+          ...parsed,
+          id: DEFAULT_TRACKING_ID,
+          verificationNumber: DEFAULT_VERIFICATION_NUMBER,
+        };
       }
     } catch (e) {
       console.error('Error loading saved state:', e);
@@ -30,9 +38,14 @@ export function App() {
   });
 
   const saveState = (newState: TrackerState) => {
-    setTrackerState(newState);
+    const updatedState = {
+      ...newState,
+      id: DEFAULT_TRACKING_ID,
+      verificationNumber: DEFAULT_VERIFICATION_NUMBER,
+    };
+    setTrackerState(updatedState);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedState));
     } catch (e) {
       console.error('Error saving state:', e);
     }
@@ -72,6 +85,8 @@ export function App() {
 
   const handleRestart = () => {
     const freshState: TrackerState = {
+      id: DEFAULT_TRACKING_ID,
+      verificationNumber: DEFAULT_VERIFICATION_NUMBER,
       step: 0,
       planId: null,
       startTime: null,
@@ -99,7 +114,14 @@ export function App() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-mono">
+              <span className="text-slate-500">Tracking ID:</span>
+              <span className="font-bold text-slate-800">{trackerState.id || DEFAULT_TRACKING_ID}</span>
+              <span className="text-slate-300">|</span>
+              <span className="text-slate-500">Verification Number:</span>
+              <span className="font-bold text-slate-800">{trackerState.verificationNumber || DEFAULT_VERIFICATION_NUMBER}</span>
+            </div>
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">
               <ShieldCheck className="w-4 h-4 text-indigo-600" />
               <span className="hidden sm:inline">Secure 256-Bit Channel</span>
