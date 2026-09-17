@@ -11,8 +11,8 @@ export const PLANS: Plan[] = [
   {
     id: 'medium',
     title: 'Medium Tracking',
-    durationMs: 36 * 60 * 60 * 1000,
-    durationLabel: '1–2 days',
+    durationMs: 10 * 24 * 60 * 60 * 1000,
+    durationLabel: '1–2 weeks',
     priceLabel: '$220'
   },
   {
