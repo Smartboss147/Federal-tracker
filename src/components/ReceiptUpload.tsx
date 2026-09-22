@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DEFAULT_TRACKING_ID, DEFAULT_VERIFICATION_NUMBER } from '../constants';
 import { UploadCloud, CheckCircle, ArrowRight, FileCheck } from 'lucide-react';
 
@@ -7,6 +8,7 @@ interface ReceiptUploadProps {
 }
 
 export function ReceiptUpload({ onContinue }: ReceiptUploadProps) {
+  const { t } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -35,13 +37,13 @@ export function ReceiptUpload({ onContinue }: ReceiptUploadProps) {
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 flex-1 flex flex-col w-full max-w-2xl mx-auto mt-4 sm:mt-8">
       <div className="text-center space-y-2 mb-8">
         <div className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-3.5 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-mono text-slate-600 mb-1">
-          <span>Tracking ID: <strong className="text-slate-900">{DEFAULT_TRACKING_ID}</strong></span>
+          <span>{t('common.trackingId')}: <strong className="text-slate-900">{DEFAULT_TRACKING_ID}</strong></span>
           <span className="text-slate-300 hidden sm:inline">•</span>
-          <span>Verification Number: <strong className="text-slate-900">{DEFAULT_VERIFICATION_NUMBER}</strong></span>
+          <span>{t('common.verificationNumber')}: <strong className="text-slate-900">{DEFAULT_VERIFICATION_NUMBER}</strong></span>
         </div>
-        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Submit Payment Proof</h2>
+        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{t('receipt.title')}</h2>
         <p className="text-slate-500 text-sm">
-          Upload a screenshot or receipt of your transaction confirmation.
+          {t('receipt.subtitle')}
         </p>
       </div>
 
@@ -71,15 +73,15 @@ export function ReceiptUpload({ onContinue }: ReceiptUploadProps) {
               <span className="text-xs font-semibold text-slate-600 truncate max-w-xs">
                 {file?.name}
               </span>
-              <span className="text-xs text-indigo-600 font-bold hover:underline">Change File</span>
+              <span className="text-xs text-indigo-600 font-bold hover:underline">{t('receipt.changeFile')}</span>
             </div>
           ) : (
             <div className="flex flex-col items-center text-center">
               <div className="w-12 h-12 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3">
                 <UploadCloud className="w-6 h-6" />
               </div>
-              <p className="text-sm font-bold text-slate-700">Click to upload receipt or screenshot</p>
-              <p className="text-xs text-slate-400 mt-1">PNG, JPG, PDF up to 10MB</p>
+              <p className="text-sm font-bold text-slate-700">{t('receipt.clickUpload')}</p>
+              <p className="text-xs text-slate-400 mt-1">{t('receipt.formatHint')}</p>
             </div>
           )}
         </label>
@@ -91,11 +93,11 @@ export function ReceiptUpload({ onContinue }: ReceiptUploadProps) {
             className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             {uploading ? (
-              <span>Uploading verification...</span>
+              <span>{t('receipt.uploading')}</span>
             ) : (
               <>
                 <FileCheck className="w-4 h-4" />
-                <span>Confirm Receipt Upload</span>
+                <span>{t('receipt.confirmUpload')}</span>
               </>
             )}
           </button>
@@ -104,7 +106,7 @@ export function ReceiptUpload({ onContinue }: ReceiptUploadProps) {
         {uploaded && (
           <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center gap-3 text-emerald-800 text-sm font-semibold">
             <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
-            <span>Proof of payment uploaded successfully.</span>
+            <span>{t('receipt.uploadSuccess')}</span>
           </div>
         )}
 
@@ -114,7 +116,7 @@ export function ReceiptUpload({ onContinue }: ReceiptUploadProps) {
             disabled={!uploaded && !file}
             className="w-full sm:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white font-bold text-sm rounded-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
           >
-            <span>Proceed to Verification</span>
+            <span>{t('receipt.proceedVerification')}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

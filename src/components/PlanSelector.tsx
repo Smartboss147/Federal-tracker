@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PLANS, DEFAULT_TRACKING_ID, DEFAULT_VERIFICATION_NUMBER } from '../constants';
-import { Clock, DollarSign, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Clock, CheckCircle2, ArrowRight } from 'lucide-react';
 
 interface PlanSelectorProps {
   onSelect: (planId: string) => void;
@@ -8,6 +9,7 @@ interface PlanSelectorProps {
 }
 
 export function PlanSelector({ onSelect, onBack }: PlanSelectorProps) {
+  const { t } = useTranslation();
   const [selectedPlanId, setSelectedPlanId] = useState<string>(PLANS[0].id);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -17,17 +19,42 @@ export function PlanSelector({ onSelect, onBack }: PlanSelectorProps) {
     }
   };
 
+  const getPlanInfo = (planId: string) => {
+    switch (planId) {
+      case 'fast':
+        return {
+          title: t('planSelector.fastTitle'),
+          duration: t('planSelector.fastDuration'),
+        };
+      case 'medium':
+        return {
+          title: t('planSelector.mediumTitle'),
+          duration: t('planSelector.mediumDuration'),
+        };
+      case 'slow':
+        return {
+          title: t('planSelector.slowTitle'),
+          duration: t('planSelector.slowDuration'),
+        };
+      default:
+        return {
+          title: t('planSelector.fastTitle'),
+          duration: t('planSelector.fastDuration'),
+        };
+    }
+  };
+
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 flex-1 flex flex-col w-full max-w-2xl mx-auto mt-4 sm:mt-8">
       <div className="text-center space-y-2 mb-8">
         <div className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-3.5 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-mono text-slate-600 mb-1">
-          <span>Tracking ID: <strong className="text-slate-900">{DEFAULT_TRACKING_ID}</strong></span>
+          <span>{t('common.trackingId')}: <strong className="text-slate-900">{DEFAULT_TRACKING_ID}</strong></span>
           <span className="text-slate-300 hidden sm:inline">•</span>
-          <span>Verification Number: <strong className="text-slate-900">{DEFAULT_VERIFICATION_NUMBER}</strong></span>
+          <span>{t('common.verificationNumber')}: <strong className="text-slate-900">{DEFAULT_VERIFICATION_NUMBER}</strong></span>
         </div>
-        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Select Recovery Plan</h2>
+        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{t('planSelector.title')}</h2>
         <p className="text-slate-500 text-sm">
-          Choose a tracking speed and duration tier suitable for your case.
+          {t('planSelector.subtitle')}
         </p>
       </div>
 
@@ -35,6 +62,7 @@ export function PlanSelector({ onSelect, onBack }: PlanSelectorProps) {
         <div className="grid grid-cols-1 gap-4">
           {PLANS.map((plan) => {
             const isSelected = selectedPlanId === plan.id;
+            const info = getPlanInfo(plan.id);
             return (
               <div
                 key={plan.id}
@@ -56,10 +84,10 @@ export function PlanSelector({ onSelect, onBack }: PlanSelectorProps) {
                     {isSelected && <CheckCircle2 className="w-4 h-4" />}
                   </div>
                   <div>
-                    <h3 className="font-bold text-slate-800 text-base">{plan.title}</h3>
+                    <h3 className="font-bold text-slate-800 text-base">{info.title}</h3>
                     <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
                       <Clock className="w-3.5 h-3.5" />
-                      <span>Duration: {plan.durationLabel}</span>
+                      <span>{t('planSelector.durationLabel', { duration: info.duration })}</span>
                     </div>
                   </div>
                 </div>
@@ -76,15 +104,15 @@ export function PlanSelector({ onSelect, onBack }: PlanSelectorProps) {
           <button
             type="button"
             onClick={onBack}
-            className="w-full sm:w-auto px-6 py-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-sm transition-all"
+            className="w-full sm:w-auto px-6 py-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-sm transition-all cursor-pointer"
           >
-            Back
+            {t('common.back')}
           </button>
           <button
             type="submit"
-            className="w-full sm:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
-            <span>Proceed to Payment</span>
+            <span>{t('planSelector.proceedToPayment')}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IncidentInfo } from '../types';
 import { DEFAULT_TRACKING_ID, DEFAULT_VERIFICATION_NUMBER } from '../constants';
-import { FileText, User, Calendar, DollarSign, AlertCircle, Home, Briefcase, MapPin } from 'lucide-react';
+import { FileText, User, Calendar, AlertCircle, Home, Briefcase, MapPin } from 'lucide-react';
 
 interface InfoFormProps {
   initialData?: IncidentInfo;
@@ -67,6 +68,7 @@ const MARITAL_STATUSES = [
 ];
 
 export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
+  const { t } = useTranslation();
   const [fullName, setFullName] = useState(initialData?.fullName || '');
   const [dateOfBirth, setDateOfBirth] = useState(initialData?.dateOfBirth || '');
   const [maritalStatus, setMaritalStatus] = useState(initialData?.maritalStatus || '');
@@ -83,50 +85,58 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
 
   const MAX_DESC_LENGTH = 500;
 
+  const maritalStatusOptions = [
+    { value: 'Single', label: t('infoForm.maritalStatusOptions.single') },
+    { value: 'Married', label: t('infoForm.maritalStatusOptions.married') },
+    { value: 'Divorced', label: t('infoForm.maritalStatusOptions.divorced') },
+    { value: 'Widowed', label: t('infoForm.maritalStatusOptions.widowed') },
+    { value: 'Prefer not to say', label: t('infoForm.maritalStatusOptions.preferNotToSay') },
+  ];
+
   const validate = () => {
     const newErrors: Record<string, string> = {};
 
     if (!fullName.trim()) {
-      newErrors.fullName = 'Full Name is required.';
+      newErrors.fullName = t('infoForm.errors.fullNameRequired');
     }
 
     if (!dateOfBirth) {
-      newErrors.dateOfBirth = 'Date of Birth is required.';
+      newErrors.dateOfBirth = t('infoForm.errors.dobRequired');
     } else {
       const selectedDate = new Date(dateOfBirth);
       const today = new Date();
       if (isNaN(selectedDate.getTime()) || selectedDate > today) {
-        newErrors.dateOfBirth = 'Please enter a valid past birth date.';
+        newErrors.dateOfBirth = t('infoForm.errors.dobPast');
       }
     }
 
     if (!maritalStatus) {
-      newErrors.maritalStatus = 'Marital Status is required.';
+      newErrors.maritalStatus = t('infoForm.errors.maritalStatusRequired');
     }
 
     if (!residentialAddress.trim()) {
-      newErrors.residentialAddress = 'Residential Address is required.';
+      newErrors.residentialAddress = t('infoForm.errors.residentialAddressRequired');
     }
 
     if (!workAddress.trim()) {
-      newErrors.workAddress = 'Work Address is required.';
+      newErrors.workAddress = t('infoForm.errors.workAddressRequired');
     }
 
     if (!employmentType.trim()) {
-      newErrors.employmentType = 'Employment Type / Occupation is required.';
+      newErrors.employmentType = t('infoForm.errors.employmentTypeRequired');
     }
 
     const numericAmount = parseFloat(amount.replace(/,/g, ''));
     if (!amount.trim()) {
-      newErrors.amount = 'Amount is required.';
+      newErrors.amount = t('infoForm.errors.amountRequired');
     } else if (isNaN(numericAmount) || numericAmount <= 0) {
-      newErrors.amount = 'Please enter a valid positive amount.';
+      newErrors.amount = t('infoForm.errors.amountPositive');
     }
 
     if (!description.trim()) {
-      newErrors.description = 'Short description of the incident is required.';
+      newErrors.description = t('infoForm.errors.descRequired');
     } else if (description.length > MAX_DESC_LENGTH) {
-      newErrors.description = `Description must not exceed ${MAX_DESC_LENGTH} characters.`;
+      newErrors.description = t('infoForm.errors.descMaxLength', { max: MAX_DESC_LENGTH });
     }
 
     setErrors(newErrors);
@@ -206,13 +216,13 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
           </div>
         </div>
         <div className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-3.5 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-mono text-slate-600 mb-1">
-          <span>Tracking ID: <strong className="text-slate-900">{DEFAULT_TRACKING_ID}</strong></span>
+          <span>{t('common.trackingId')}: <strong className="text-slate-900">{DEFAULT_TRACKING_ID}</strong></span>
           <span className="text-slate-300 hidden sm:inline">•</span>
-          <span>Verification Number: <strong className="text-slate-900">{DEFAULT_VERIFICATION_NUMBER}</strong></span>
+          <span>{t('common.verificationNumber')}: <strong className="text-slate-900">{DEFAULT_VERIFICATION_NUMBER}</strong></span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight">Funds Tracker & Personal Profile</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight">{t('infoForm.title')}</h1>
         <p className="text-slate-500 text-sm max-w-md mx-auto">
-          Please provide your comprehensive personal, contact, employment, and incident details below to proceed.
+          {t('infoForm.subtitle')}
         </p>
       </div>
 
@@ -220,12 +230,12 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
         
         {/* Section 1: Personal Details */}
         <div className="space-y-4 pt-2 border-t border-slate-100">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-600">Personal Details</h3>
+          <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-600">{t('infoForm.personalDetails')}</h3>
 
           {/* Full Name */}
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-              Full Name <span className="text-rose-500">*</span>
+              {t('infoForm.fullName')} <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -239,7 +249,7 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
                   if (errors.fullName) setErrors(prev => ({ ...prev, fullName: '' }));
                 }}
                 onBlur={() => setTouched(prev => ({ ...prev, fullName: true }))}
-                placeholder="e.g. Alex Morgan"
+                placeholder={t('infoForm.fullNamePlaceholder')}
                 className={`w-full pl-10 pr-4 py-3 rounded-lg border text-sm text-slate-800 placeholder-slate-400 focus:outline-none transition-all ${
                   errors.fullName && touched.fullName
                     ? 'border-rose-400 bg-rose-50/20 focus:ring-2 focus:ring-rose-200'
@@ -259,7 +269,7 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
             {/* Date of Birth */}
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Date of Birth <span className="text-rose-500">*</span>
+                {t('infoForm.dateOfBirth')} <span className="text-rose-500">*</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -292,7 +302,7 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
             {/* Marital Status */}
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Marital Status <span className="text-rose-500">*</span>
+                {t('infoForm.maritalStatus')} <span className="text-rose-500">*</span>
               </label>
               <select
                 value={maritalStatus}
@@ -307,8 +317,8 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
                     : 'border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200'
                 }`}
               >
-                <option value="">Select marital status...</option>
-                {MARITAL_STATUSES.map(ms => (
+                <option value="">{t('infoForm.maritalStatusSelect')}</option>
+                {maritalStatusOptions.map(ms => (
                   <option key={ms.value} value={ms.value}>{ms.label}</option>
                 ))}
               </select>
@@ -324,12 +334,12 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
 
         {/* Section 2: Contact Information */}
         <div className="space-y-4 pt-4 border-t border-slate-100">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-600">Contact Information</h3>
+          <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-600">{t('infoForm.contactInfo')}</h3>
 
           {/* Residential Address */}
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-              Residential Address (Full Address) <span className="text-rose-500">*</span>
+              {t('infoForm.residentialAddress')} <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
               <div className="absolute top-3.5 left-3.5 pointer-events-none text-slate-400">
@@ -343,7 +353,7 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
                   if (errors.residentialAddress) setErrors(prev => ({ ...prev, residentialAddress: '' }));
                 }}
                 onBlur={() => setTouched(prev => ({ ...prev, residentialAddress: true }))}
-                placeholder="Street address, apartment, city, state, postal code, country..."
+                placeholder={t('infoForm.residentialAddressPlaceholder')}
                 className={`w-full pl-10 pr-4 py-3 rounded-lg border text-sm text-slate-800 placeholder-slate-400 focus:outline-none transition-all resize-none ${
                   errors.residentialAddress && touched.residentialAddress
                     ? 'border-rose-400 bg-rose-50/20 focus:ring-2 focus:ring-rose-200'
@@ -362,7 +372,7 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
           {/* Work Address */}
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-              Work Address (Full Address) <span className="text-rose-500">*</span>
+              {t('infoForm.workAddress')} <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
               <div className="absolute top-3.5 left-3.5 pointer-events-none text-slate-400">
@@ -376,7 +386,7 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
                   if (errors.workAddress) setErrors(prev => ({ ...prev, workAddress: '' }));
                 }}
                 onBlur={() => setTouched(prev => ({ ...prev, workAddress: true }))}
-                placeholder="Company street address, building, city, state, postal code, country..."
+                placeholder={t('infoForm.workAddressPlaceholder')}
                 className={`w-full pl-10 pr-4 py-3 rounded-lg border text-sm text-slate-800 placeholder-slate-400 focus:outline-none transition-all resize-none ${
                   errors.workAddress && touched.workAddress
                     ? 'border-rose-400 bg-rose-50/20 focus:ring-2 focus:ring-rose-200'
@@ -395,13 +405,13 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
 
         {/* Section 3: Employment Information */}
         <div className="space-y-4 pt-4 border-t border-slate-100">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-600">Employment Information</h3>
+          <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-600">{t('infoForm.employmentInfo')}</h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Employment Type / Occupation */}
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Employment Type / Occupation <span className="text-rose-500">*</span>
+                {t('infoForm.employmentType')} <span className="text-rose-500">*</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -415,7 +425,7 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
                     if (errors.employmentType) setErrors(prev => ({ ...prev, employmentType: '' }));
                   }}
                   onBlur={() => setTouched(prev => ({ ...prev, employmentType: true }))}
-                  placeholder="e.g. Software Engineer, Accountant..."
+                  placeholder={t('infoForm.employmentTypePlaceholder')}
                   className={`w-full pl-10 pr-4 py-3 rounded-lg border text-sm text-slate-800 placeholder-slate-400 focus:outline-none transition-all ${
                     errors.employmentType && touched.employmentType
                       ? 'border-rose-400 bg-rose-50/20 focus:ring-2 focus:ring-rose-200'
@@ -434,13 +444,13 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
             {/* Employer or Business Name (Optional) */}
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Employer or Business Name <span className="text-slate-400 font-normal">(Optional)</span>
+                {t('infoForm.employerName')} <span className="text-slate-400 font-normal">{t('infoForm.employerNameOptional')}</span>
               </label>
               <input
                 type="text"
                 value={employerName}
                 onChange={(e) => setEmployerName(e.target.value)}
-                placeholder="e.g. Acme Corp Inc."
+                placeholder={t('infoForm.employerNamePlaceholder')}
                 className="w-full px-4 py-3 rounded-lg border border-slate-300 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 bg-white"
               />
             </div>
@@ -450,18 +460,18 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
         {/* Section 4: Case Information */}
         <div className="space-y-4 pt-4 border-t border-slate-100">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-600">Case Information</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-600">{t('infoForm.caseInfo')}</h3>
             <div className="flex flex-wrap items-center gap-x-2 text-[11px] font-mono text-slate-500">
-              <span>Tracking ID: <strong className="text-slate-800">{DEFAULT_TRACKING_ID}</strong></span>
+              <span>{t('common.trackingId')}: <strong className="text-slate-800">{DEFAULT_TRACKING_ID}</strong></span>
               <span className="text-slate-300">•</span>
-              <span>Verification Number: <strong className="text-slate-800">{DEFAULT_VERIFICATION_NUMBER}</strong></span>
+              <span>{t('common.verificationNumber')}: <strong className="text-slate-800">{DEFAULT_VERIFICATION_NUMBER}</strong></span>
             </div>
           </div>
 
           {/* Amount (Currency + Amount) */}
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-              Amount <span className="text-rose-500">*</span>
+              {t('infoForm.amount')} <span className="text-rose-500">*</span>
             </label>
             <div className="flex gap-2">
               <div className="w-40 shrink-0">
@@ -488,7 +498,7 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
                   value={amount}
                   onChange={handleAmountChange}
                   onBlur={() => setTouched(prev => ({ ...prev, amount: true }))}
-                  placeholder="0.00"
+                  placeholder={t('infoForm.amountPlaceholder')}
                   className={`w-full pl-9 pr-4 py-3 rounded-lg border text-sm text-slate-800 placeholder-slate-400 focus:outline-none transition-all ${
                     errors.amount && touched.amount
                       ? 'border-rose-400 bg-rose-50/20 focus:ring-2 focus:ring-rose-200'
@@ -509,7 +519,7 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
           <div>
             <div className="flex justify-between items-center mb-2">
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Incident Description <span className="text-rose-500">*</span>
+                {t('infoForm.incidentDescription')} <span className="text-rose-500">*</span>
               </label>
               <span className={`text-[11px] ${description.length > MAX_DESC_LENGTH ? 'text-rose-600 font-bold' : 'text-slate-400'}`}>
                 {description.length} / {MAX_DESC_LENGTH}
@@ -525,7 +535,7 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
                 }
               }}
               onBlur={() => setTouched(prev => ({ ...prev, description: true }))}
-              placeholder="Briefly describe what happened, including dates, financial platforms involved, transaction references, or details of the funds loss..."
+              placeholder={t('infoForm.incidentDescriptionPlaceholder')}
               className={`w-full p-3.5 rounded-lg border text-sm text-slate-800 placeholder-slate-400 focus:outline-none transition-all resize-none ${
                 errors.description && touched.description
                   ? 'border-rose-400 bg-rose-50/20 focus:ring-2 focus:ring-rose-200'
@@ -546,16 +556,16 @@ export function InfoForm({ initialData, onContinue, onCancel }: InfoFormProps) {
           <button
             type="button"
             onClick={handleCancel}
-            className="w-full sm:w-auto px-6 py-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-sm transition-all"
+            className="w-full sm:w-auto px-6 py-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-sm transition-all cursor-pointer"
           >
-            Cancel
+            {t('common.cancel')}
           </button>
           
           <button
             type="submit"
-            className="w-full sm:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-lg active:scale-[0.98] transition-all shadow-sm"
+            className="w-full sm:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-lg active:scale-[0.98] transition-all shadow-sm cursor-pointer"
           >
-            Continue
+            {t('common.continue')}
           </button>
         </div>
       </form>

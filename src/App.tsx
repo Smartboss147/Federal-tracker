@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TrackerState, IncidentInfo } from './types';
 import { DEFAULT_TRACKING_ID, DEFAULT_VERIFICATION_NUMBER } from './constants';
 import { InfoForm } from './components/InfoForm';
@@ -7,6 +8,7 @@ import { PaymentScreen } from './components/PaymentScreen';
 import { ReceiptUpload } from './components/ReceiptUpload';
 import { VerificationCode } from './components/VerificationCode';
 import { TrackerDashboard } from './components/TrackerDashboard';
+import { LanguageDropdown } from './components/LanguageDropdown';
 import { ShieldCheck, RotateCcw, Landmark } from 'lucide-react';
 
 const STORAGE_KEY = 'federal_funds_tracker_state';
@@ -20,6 +22,7 @@ const initialState: TrackerState = {
 };
 
 export function App() {
+  const { t } = useTranslation();
   const [trackerState, setTrackerState] = useState<TrackerState>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -106,27 +109,28 @@ export function App() {
             </div>
             <div>
               <span className="font-bold text-slate-900 text-base sm:text-lg tracking-tight block">
-                Federal Funds Tracker
+                {t('common.appTitle')}
               </span>
               <span className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold block">
-                Asset Recovery Clearing System
+                {t('common.appSubtitle')}
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-mono">
-              <span className="text-slate-500">Tracking ID:</span>
+            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-mono">
+              <span className="text-slate-500">{t('common.trackingId')}:</span>
               <span className="font-bold text-slate-800">{trackerState.id || DEFAULT_TRACKING_ID}</span>
               <span className="text-slate-300">|</span>
-              <span className="text-slate-500">Verification Number:</span>
+              <span className="text-slate-500">{t('common.verificationNumber')}:</span>
               <span className="font-bold text-slate-800">{trackerState.verificationNumber || DEFAULT_VERIFICATION_NUMBER}</span>
             </div>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">
               <ShieldCheck className="w-4 h-4 text-indigo-600" />
-              <span className="hidden sm:inline">Secure 256-Bit Channel</span>
-              <span className="sm:hidden">Encrypted</span>
+              <span className="hidden md:inline">{t('common.secureChannel')}</span>
+              <span className="md:hidden">{t('common.encrypted')}</span>
             </div>
+            <LanguageDropdown />
           </div>
         </div>
       </header>
@@ -163,7 +167,7 @@ export function App() {
       {/* Footer */}
       <footer className="py-6 border-t border-slate-200 bg-white text-center text-xs text-slate-400">
         <div className="max-w-7xl mx-auto px-4">
-          <p>© {new Date().getFullYear()} Federal Inter-Agency Asset Tracing & Recovery Network. All rights reserved.</p>
+          <p>{t('common.footerRights', { year: new Date().getFullYear() })}</p>
         </div>
       </footer>
     </div>

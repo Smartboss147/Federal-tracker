@@ -1,17 +1,19 @@
 import React from 'react';
-import { motion } from 'motion/react';
-import { ShieldCheck, Network, Database, CheckCircle2, Lock, ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { ShieldCheck, Network, Database, CheckCircle2, Lock } from 'lucide-react';
 
 interface RouteVisualizerProps {
   progress: number;
 }
 
 export function RouteVisualizer({ progress }: RouteVisualizerProps) {
+  const { t } = useTranslation();
+
   const steps = [
-    { label: 'Incident Assessment', desc: 'Case profiling & forensic intake', icon: Database, threshold: 0 },
-    { label: 'Blockchain Forensics', desc: 'Cluster analysis & address clustering', icon: Network, threshold: 25 },
-    { label: 'Asset Freezing', desc: 'Issuing federal freeze requests', icon: Lock, threshold: 60 },
-    { label: 'Final Settlement', desc: 'Funds repatriated to secure escrow', icon: ShieldCheck, threshold: 95 },
+    { label: t('routeVisualizer.step1Title'), desc: t('routeVisualizer.step1Desc'), icon: Database, threshold: 0 },
+    { label: t('routeVisualizer.step2Title'), desc: t('routeVisualizer.step2Desc'), icon: Network, threshold: 25 },
+    { label: t('routeVisualizer.step3Title'), desc: t('routeVisualizer.step3Desc'), icon: Lock, threshold: 60 },
+    { label: t('routeVisualizer.step4Title'), desc: t('routeVisualizer.step4Desc'), icon: ShieldCheck, threshold: 95 },
   ];
 
   return (
@@ -20,12 +22,12 @@ export function RouteVisualizer({ progress }: RouteVisualizerProps) {
         <div>
           <h3 className="font-bold text-base text-slate-100 flex items-center gap-2">
             <Network className="w-5 h-5 text-indigo-400" />
-            <span>Trace Route & Intercept Pipeline</span>
+            <span>{t('routeVisualizer.title')}</span>
           </h3>
-          <p className="text-xs text-slate-400 mt-0.5">Real-time ledger audit and recovery progression</p>
+          <p className="text-xs text-slate-400 mt-0.5">{t('routeVisualizer.subtitle')}</p>
         </div>
         <span className="text-xs font-mono px-2.5 py-1 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-          Status: Active Monitoring
+          {t('routeVisualizer.activeMonitoring')}
         </span>
       </div>
 
@@ -62,7 +64,7 @@ export function RouteVisualizer({ progress }: RouteVisualizerProps) {
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                 ) : isCurrent ? (
                   <span className="text-[10px] uppercase font-bold tracking-wider text-indigo-400 font-mono">
-                    Live
+                    {t('routeVisualizer.live')}
                   </span>
                 ) : null}
               </div>

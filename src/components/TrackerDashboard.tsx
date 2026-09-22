@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TrackerState } from '../types';
 import { PLANS, DEFAULT_TRACKING_ID, DEFAULT_VERIFICATION_NUMBER } from '../constants';
 import { RouteVisualizer } from './RouteVisualizer';
@@ -12,6 +13,7 @@ interface TrackerDashboardProps {
 }
 
 export function TrackerDashboard({ state, onRestart }: TrackerDashboardProps) {
+  const { t } = useTranslation();
   const plan = PLANS.find(p => p.id === state.planId) || PLANS[0];
   const startTime = state.startTime || Date.now();
   const totalDuration = plan.durationMs;
@@ -40,6 +42,9 @@ export function TrackerDashboard({ state, onRestart }: TrackerDashboardProps) {
     }
   }, [isCompleted]);
 
+  const planTitle = plan.id === 'fast' ? t('plans.fastTitle') : plan.id === 'medium' ? t('plans.mediumTitle') : t('plans.slowTitle');
+  const planDuration = plan.id === 'fast' ? t('plans.fastDuration') : plan.id === 'medium' ? t('plans.mediumDuration') : t('plans.slowDuration');
+
   return (
     <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto mt-4 sm:mt-8 pb-12">
       {/* Header card */}
@@ -51,18 +56,18 @@ export function TrackerDashboard({ state, onRestart }: TrackerDashboardProps) {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl font-bold text-slate-800">Federal Funds Recovery Console</h1>
+                <h1 className="text-xl font-bold text-slate-800">{t('dashboard.title')}</h1>
                 <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  Active
+                  {t('dashboard.active')}
                 </span>
               </div>
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-slate-500">
                 <p>
-                  Tracking ID: <span className="font-mono font-semibold text-slate-800">{state.id || DEFAULT_TRACKING_ID}</span>
+                  {t('common.trackingId')}: <span className="font-mono font-semibold text-slate-800">{state.id || DEFAULT_TRACKING_ID}</span>
                 </p>
                 <span className="text-slate-300 hidden sm:inline">•</span>
                 <p>
-                  Verification Number: <span className="font-mono font-semibold text-slate-800">{state.verificationNumber || DEFAULT_VERIFICATION_NUMBER}</span>
+                  {t('common.verificationNumber')}: <span className="font-mono font-semibold text-slate-800">{state.verificationNumber || DEFAULT_VERIFICATION_NUMBER}</span>
                 </p>
               </div>
             </div>
@@ -74,7 +79,7 @@ export function TrackerDashboard({ state, onRestart }: TrackerDashboardProps) {
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>New Session</span>
+              <span>{t('dashboard.newSession')}</span>
             </button>
           </div>
         </div>
@@ -83,14 +88,14 @@ export function TrackerDashboard({ state, onRestart }: TrackerDashboardProps) {
         <div className="mt-6 space-y-4">
           <div className="flex justify-between items-end">
             <div>
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Live Trace Progress</span>
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">{t('dashboard.liveProgress')}</span>
               <span className="text-3xl font-extrabold text-indigo-600 font-mono tracking-tight">
                 {progress.toFixed(2)}%
               </span>
             </div>
 
             <div className="text-right">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Estimated Remaining</span>
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">{t('dashboard.estimatedRemaining')}</span>
               <div className="flex items-center gap-1.5 text-slate-800 font-mono font-bold text-lg justify-end">
                 <Clock className="w-4 h-4 text-indigo-500" />
                 <span>{formatTimeRemaining(remaining)}</span>
@@ -107,8 +112,8 @@ export function TrackerDashboard({ state, onRestart }: TrackerDashboardProps) {
           </div>
 
           <div className="flex justify-between text-xs text-slate-400 font-medium">
-            <span>Started: {formatDateTime(startTime)}</span>
-            <span>Plan: {plan.title} ({plan.durationLabel})</span>
+            <span>{t('dashboard.started', { date: formatDateTime(startTime) })}</span>
+            <span>{t('dashboard.planLabel', { plan: planTitle, duration: planDuration })}</span>
           </div>
         </div>
       </div>
@@ -122,57 +127,57 @@ export function TrackerDashboard({ state, onRestart }: TrackerDashboardProps) {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2">
               <UserCheck className="w-5 h-5 text-indigo-600" />
-              <h2 className="text-base font-bold text-slate-800">Verified Profile & Case File Information</h2>
+              <h2 className="text-base font-bold text-slate-800">{t('dashboard.verifiedProfileTitle')}</h2>
             </div>
             <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
               <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 font-semibold border border-slate-200">
-                Tracking ID: <span className="text-slate-900">{state.id || DEFAULT_TRACKING_ID}</span>
+                {t('common.trackingId')}: <span className="text-slate-900">{state.id || DEFAULT_TRACKING_ID}</span>
               </span>
               <span className="px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200">
-                Verification Number: <span className="text-indigo-900">{state.verificationNumber || DEFAULT_VERIFICATION_NUMBER}</span>
+                {t('common.verificationNumber')}: <span className="text-indigo-900">{state.verificationNumber || DEFAULT_VERIFICATION_NUMBER}</span>
               </span>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-4 gap-x-6 text-xs">
             <div>
-              <span className="text-slate-400 font-medium block">Case Tracking ID</span>
+              <span className="text-slate-400 font-medium block">{t('dashboard.caseTrackingId')}</span>
               <span className="text-slate-800 font-bold font-mono text-sm">{state.id || DEFAULT_TRACKING_ID}</span>
             </div>
             <div>
-              <span className="text-slate-400 font-medium block">Verification Number</span>
+              <span className="text-slate-400 font-medium block">{t('common.verificationNumber')}</span>
               <span className="text-slate-800 font-bold font-mono text-sm">{state.verificationNumber || DEFAULT_VERIFICATION_NUMBER}</span>
             </div>
             <div>
-              <span className="text-slate-400 font-medium block">Full Name</span>
+              <span className="text-slate-400 font-medium block">{t('dashboard.fullName')}</span>
               <span className="text-slate-800 font-bold text-sm">{state.incidentInfo.fullName}</span>
             </div>
             <div>
-              <span className="text-slate-400 font-medium block">Date of Birth</span>
+              <span className="text-slate-400 font-medium block">{t('dashboard.dateOfBirth')}</span>
               <span className="text-slate-800 font-bold text-sm">{state.incidentInfo.dateOfBirth}</span>
             </div>
             <div>
-              <span className="text-slate-400 font-medium block">Marital Status</span>
-              <span className="text-slate-800 font-bold text-sm">{state.incidentInfo.maritalStatus || 'N/A'}</span>
+              <span className="text-slate-400 font-medium block">{t('dashboard.maritalStatus')}</span>
+              <span className="text-slate-800 font-bold text-sm">{state.incidentInfo.maritalStatus || t('dashboard.na')}</span>
             </div>
             <div>
-              <span className="text-slate-400 font-medium block">Residential Address</span>
+              <span className="text-slate-400 font-medium block">{t('dashboard.residentialAddress')}</span>
               <span className="text-slate-800 font-bold text-sm">{state.incidentInfo.residentialAddress}</span>
             </div>
             <div>
-              <span className="text-slate-400 font-medium block">Work Address</span>
+              <span className="text-slate-400 font-medium block">{t('dashboard.workAddress')}</span>
               <span className="text-slate-800 font-bold text-sm">{state.incidentInfo.workAddress}</span>
             </div>
             <div>
-              <span className="text-slate-400 font-medium block">Employment / Occupation</span>
+              <span className="text-slate-400 font-medium block">{t('dashboard.employment')}</span>
               <span className="text-slate-800 font-bold text-sm">{state.incidentInfo.employmentType} {state.incidentInfo.employerName ? `(${state.incidentInfo.employerName})` : ''}</span>
             </div>
             <div className="sm:col-span-3">
-              <span className="text-slate-400 font-medium block">Claimed Amount</span>
+              <span className="text-slate-400 font-medium block">{t('dashboard.claimedAmount')}</span>
               <span className="text-slate-800 font-bold text-sm">{state.incidentInfo.currency} {state.incidentInfo.amount}</span>
             </div>
             <div className="sm:col-span-3">
-              <span className="text-slate-400 font-medium block mb-1">Incident Description</span>
+              <span className="text-slate-400 font-medium block mb-1">{t('dashboard.incidentDescription')}</span>
               <div className="p-3 bg-slate-50 border border-slate-100 rounded-lg text-slate-700 text-xs leading-relaxed">
                 {state.incidentInfo.description}
               </div>

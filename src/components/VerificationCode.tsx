@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DEFAULT_TRACKING_ID, DEFAULT_VERIFICATION_NUMBER } from '../constants';
 import { Lock, ShieldAlert, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -8,6 +9,7 @@ interface VerificationCodeProps {
 }
 
 export function VerificationCode({ onSuccess }: VerificationCodeProps) {
+  const { t } = useTranslation();
   const [code, setCode] = useState('');
   const [error, setError] = useState(false);
   const REQUIRED_CODE = '144864';
@@ -35,13 +37,13 @@ export function VerificationCode({ onSuccess }: VerificationCodeProps) {
           </div>
         </div>
         <div className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-3.5 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-mono text-slate-600 mb-2">
-          <span>Tracking ID: <strong className="text-slate-900">{DEFAULT_TRACKING_ID}</strong></span>
+          <span>{t('common.trackingId')}: <strong className="text-slate-900">{DEFAULT_TRACKING_ID}</strong></span>
           <span className="text-slate-300 hidden sm:inline">•</span>
-          <span>Verification Number: <strong className="text-slate-900">{DEFAULT_VERIFICATION_NUMBER}</strong></span>
+          <span>{t('common.verificationNumber')}: <strong className="text-slate-900">{DEFAULT_VERIFICATION_NUMBER}</strong></span>
         </div>
-        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Security Verification</h2>
+        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{t('verification.title')}</h2>
         <p className="text-slate-500 text-sm mt-2">
-          Please enter your 6-digit authorization code to proceed to the tracking console.
+          {t('verification.subtitle')}
         </p>
       </div>
 
@@ -72,7 +74,7 @@ export function VerificationCode({ onSuccess }: VerificationCodeProps) {
             >
               <p className="text-rose-500 text-xs font-bold flex items-center justify-center gap-1">
                 <ShieldAlert className="w-3.5 h-3.5" />
-                <span>Invalid authorization code. Please try again.</span>
+                <span>{t('verification.invalidCode')}</span>
               </p>
             </motion.div>
           )}
@@ -83,7 +85,7 @@ export function VerificationCode({ onSuccess }: VerificationCodeProps) {
           disabled={code.length !== 6}
           className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 group cursor-pointer"
         >
-          <span>Verify & Access Console</span>
+          <span>{t('verification.verifyButton')}</span>
           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </button>
       </form>
@@ -92,7 +94,7 @@ export function VerificationCode({ onSuccess }: VerificationCodeProps) {
         <div className="bg-slate-50 rounded-lg p-4 flex items-start gap-3">
           <ShieldAlert className="w-5 h-5 text-slate-400 shrink-0 mt-0.5" />
           <p className="text-[11px] text-slate-500 leading-relaxed">
-            This tracking session is protected by federal clearing channel encryption. Unauthorized access attempts are logged and reported to the system administrator.
+            {t('verification.disclaimer')}
           </p>
         </div>
       </div>

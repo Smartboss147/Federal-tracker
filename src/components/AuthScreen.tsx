@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Lock, Mail, ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { ShieldCheck, Mail, ArrowRight } from 'lucide-react';
 
 interface AuthScreenProps {
   onSignIn: (email: string) => void;
 }
 
 export function AuthScreen({ onSignIn }: AuthScreenProps) {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -23,16 +25,16 @@ export function AuthScreen({ onSignIn }: AuthScreenProps) {
             <ShieldCheck className="w-7 h-7" />
           </div>
         </div>
-        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Federal Funds Recovery</h2>
+        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{t('auth.title')}</h2>
         <p className="text-slate-500 text-sm mt-2">
-          Secure case portal for stolen and lost cryptocurrency assets recovery.
+          {t('auth.subtitle')}
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-            Email Address
+            {t('auth.emailAddress')}
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -53,7 +55,7 @@ export function AuthScreen({ onSignIn }: AuthScreenProps) {
           type="submit"
           className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
         >
-          <span>Access Portal</span>
+          <span>{t('auth.accessPortal')}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </form>
