@@ -98,6 +98,16 @@ export function App() {
     saveState(freshState);
   };
 
+  const handleAppRefresh = () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      console.error('Error clearing storage:', e);
+    }
+    setTrackerState(initialState);
+    window.location.reload();
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-800 antialiased">
       {/* Navigation Header */}
@@ -119,7 +129,7 @@ export function App() {
 
           <div className="flex items-center gap-2 sm:gap-3">
             <button
-              onClick={() => window.location.reload()}
+              onClick={handleAppRefresh}
               title={t('common.refresh', 'Refresh App')}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors shadow-sm cursor-pointer"
             >
