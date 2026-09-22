@@ -13,6 +13,7 @@ export const en = {
     footerRights: '© {{year}} Federal Inter-Agency Asset Tracing & Recovery Network. All rights reserved.',
     language: 'Language',
     selectLanguage: 'Select Language',
+    refresh: 'Refresh',
   },
   languages: {
     en: 'English',
@@ -125,7 +126,7 @@ export const en = {
     clickUpload: 'Click to upload receipt or screenshot',
     formatHint: 'PNG, JPG, PDF up to 10MB',
     changeFile: 'Change File',
-    uploading: 'Uploading verification...',
+    uploading: 'Uploading...',
     confirmUpload: 'Confirm Receipt Upload',
     uploadSuccess: 'Proof of payment uploaded successfully.',
     proceedVerification: 'Proceed to Verification',

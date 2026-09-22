@@ -53,7 +53,7 @@ export function ReceiptUpload({ onContinue }: ReceiptUploadProps) {
           <input
             id="receipt-upload"
             type="file"
-            accept="image/*,.pdf"
+            accept="image/*"
             className="hidden"
             onChange={handleFileChange}
           />

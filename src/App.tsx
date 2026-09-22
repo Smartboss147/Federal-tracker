@@ -118,6 +118,14 @@ export function App() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              onClick={() => window.location.reload()}
+              title={t('common.refresh', 'Refresh App')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors shadow-sm cursor-pointer"
+            >
+              <RotateCcw className="w-4 h-4 text-slate-600" />
+              <span className="hidden sm:inline">{t('common.refresh', 'Refresh')}</span>
+            </button>
             <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">
               <ShieldCheck className="w-4 h-4 text-indigo-600" />
               <span className="hidden md:inline">{t('common.secureChannel')}</span>

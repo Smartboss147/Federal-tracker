@@ -125,7 +125,7 @@ export const fr = {
     clickUpload: 'Cliquez pour télécharger le reçu ou la capture',
     formatHint: 'PNG, JPG, PDF jusqu\'à 10 Mo',
     changeFile: 'Changer de Fichier',
-    uploading: 'Téléchargement de la vérification...',
+    uploading: 'Téléchargement...',
     confirmUpload: 'Confirmer l\'Envoi du Reçu',
     uploadSuccess: 'Preuve de paiement téléchargée avec succès.',
     proceedVerification: 'Procéder à la Vérification',

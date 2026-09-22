@@ -125,7 +125,7 @@ export const es = {
     clickUpload: 'Haga clic para subir recibo o captura de pantalla',
     formatHint: 'PNG, JPG, PDF hasta 10MB',
     changeFile: 'Cambiar Archivo',
-    uploading: 'Subiendo verificación...',
+    uploading: 'Subiendo...',
     confirmUpload: 'Confirmar Subida de Recibo',
     uploadSuccess: 'Comprobante de pago subido con éxito.',
     proceedVerification: 'Proceder a la Verificación',
