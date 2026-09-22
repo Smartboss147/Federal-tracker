@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TrackerState, IncidentInfo } from './types';
 import { DEFAULT_TRACKING_ID, DEFAULT_VERIFICATION_NUMBER } from './constants';
-import { InfoForm } from './components/InfoForm';
+import { PersonalDetailsForm } from './components/PersonalDetailsForm';
 import { PlanSelector } from './components/PlanSelector';
 import { PaymentScreen } from './components/PaymentScreen';
 import { ReceiptUpload } from './components/ReceiptUpload';
@@ -118,13 +118,6 @@ export function App() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-mono">
-              <span className="text-slate-500">{t('common.trackingId')}:</span>
-              <span className="font-bold text-slate-800">{trackerState.id || DEFAULT_TRACKING_ID}</span>
-              <span className="text-slate-300">|</span>
-              <span className="text-slate-500">{t('common.verificationNumber')}:</span>
-              <span className="font-bold text-slate-800">{trackerState.verificationNumber || DEFAULT_VERIFICATION_NUMBER}</span>
-            </div>
             <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">
               <ShieldCheck className="w-4 h-4 text-indigo-600" />
               <span className="hidden md:inline">{t('common.secureChannel')}</span>
@@ -138,7 +131,7 @@ export function App() {
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex flex-col items-center justify-start">
         {trackerState.step === 0 && (
-          <InfoForm
+          <PersonalDetailsForm
             initialData={trackerState.incidentInfo}
             onContinue={handleInfoContinue}
             onCancel={handleRestart}

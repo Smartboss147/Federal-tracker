@@ -6,6 +6,14 @@ export interface Plan {
   priceLabel: string;
 }
 
+export interface TrackingAgent {
+  name: string;
+  role: string;
+  phone: string;
+  messagingApp: string;
+  signalUrl: string;
+}
+
 export interface IncidentInfo {
   fullName: string;
   dateOfBirth: string;

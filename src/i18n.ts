@@ -33,6 +33,11 @@ i18n
     interpolation: {
       escapeValue: false,
     },
+    parseMissingKeyHandler: (key) => {
+      // Prevent technical dot-notated keys from ever showing in the UI
+      const lastPart = key.split('.').pop() || '';
+      return lastPart.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase()).trim();
+    },
   });
 
 i18n.on('languageChanged', (lng) => {

@@ -3,6 +3,14 @@ import { Plan } from './types';
 export const DEFAULT_TRACKING_ID = 'FBI-INTL-0926-874512';
 export const DEFAULT_VERIFICATION_NUMBER = 'VCN-473829';
 
+export const TRACKING_AGENT = {
+  name: 'Robert Harrington',
+  role: 'Live Tracking Agent',
+  phone: '+1 276-694-9259',
+  messagingApp: 'Signal',
+  signalUrl: 'https://signal.me/#eu/weWmgtMv2ESqaXDS_KmehSCu4Q1mfzP5w5C003eM9-jlBMMcvFhIUoyEJ35OKQ-7'
+};
+
 export const PLANS: Plan[] = [
   {
     id: 'fast',

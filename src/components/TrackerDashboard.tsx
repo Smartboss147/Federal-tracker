@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TrackerState } from '../types';
 import { PLANS, DEFAULT_TRACKING_ID, DEFAULT_VERIFICATION_NUMBER } from '../constants';
 import { RouteVisualizer } from './RouteVisualizer';
+import { AgentContactCard } from './AgentContactCard';
 import { formatTimeRemaining, formatDateTime } from '../utils';
-import { ShieldCheck, Clock, CheckCircle, RotateCcw, AlertTriangle, UserCheck, Landmark } from 'lucide-react';
+import { Clock, RotateCcw, UserCheck, Landmark, MessageSquare } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface TrackerDashboardProps {
@@ -19,6 +20,8 @@ export function TrackerDashboard({ state, onRestart }: TrackerDashboardProps) {
   const totalDuration = plan.durationMs;
 
   const [now, setNow] = useState(Date.now());
+  const [isAgentHighlighted, setIsAgentHighlighted] = useState(false);
+  const agentSectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -42,16 +45,29 @@ export function TrackerDashboard({ state, onRestart }: TrackerDashboardProps) {
     }
   }, [isCompleted]);
 
-  const planTitle = plan.id === 'fast' ? t('plans.fastTitle') : plan.id === 'medium' ? t('plans.mediumTitle') : t('plans.slowTitle');
-  const planDuration = plan.id === 'fast' ? t('plans.fastDuration') : plan.id === 'medium' ? t('plans.mediumDuration') : t('plans.slowDuration');
+  const handleContactAgentClick = () => {
+    if (agentSectionRef.current) {
+      agentSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      const el = document.getElementById('agent-contact-section');
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    setIsAgentHighlighted(true);
+    setTimeout(() => {
+      setIsAgentHighlighted(false);
+    }, 2200);
+  };
+
+  const planTitle = plan.id === 'fast' ? (t('planSelector.fastTitle') || t('plans.fastTitle')) : plan.id === 'medium' ? (t('planSelector.mediumTitle') || t('plans.mediumTitle')) : (t('planSelector.slowTitle') || t('plans.slowTitle'));
+  const planDuration = plan.id === 'fast' ? (t('planSelector.fastDuration') || t('plans.fastDuration')) : plan.id === 'medium' ? (t('planSelector.mediumDuration') || t('plans.mediumDuration')) : (t('planSelector.slowDuration') || t('plans.slowDuration'));
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto mt-4 sm:mt-8 pb-12">
-      {/* Header card */}
+      {/* Federal Funds Tracking Console Header Card - Sole Authoritative Display of Tracking ID */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
               <Landmark className="w-6 h-6" />
             </div>
             <div>
@@ -61,6 +77,7 @@ export function TrackerDashboard({ state, onRestart }: TrackerDashboardProps) {
                   {t('dashboard.active')}
                 </span>
               </div>
+              {/* The Authoritative Tracking ID & Verification Number Display */}
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-slate-500">
                 <p>
                   {t('common.trackingId')}: <span className="font-mono font-semibold text-slate-800">{state.id || DEFAULT_TRACKING_ID}</span>
@@ -73,8 +90,19 @@ export function TrackerDashboard({ state, onRestart }: TrackerDashboardProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
+              id="nav-contact-agent-button"
+              type="button"
+              onClick={handleContactAgentClick}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-xs hover:shadow active:scale-[0.98] transition-all cursor-pointer"
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>{t('agent.contactButtonNav')}</span>
+            </button>
+
+            <button
+              type="button"
               onClick={onRestart}
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
             >
@@ -118,36 +146,21 @@ export function TrackerDashboard({ state, onRestart }: TrackerDashboardProps) {
         </div>
       </div>
 
-      {/* Visualizer */}
+      {/* Trace Route & Intercept Pipeline */}
       <RouteVisualizer progress={progress} />
 
-      {/* Incident Information Card */}
+      {/* Message Your Live Tracking Agent Section */}
+      <AgentContactCard isHighlighted={isAgentHighlighted} cardRef={agentSectionRef} />
+
+      {/* Verified Profile & Case File Information Card */}
       {state.incidentInfo && (
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100">
-            <div className="flex items-center gap-2">
-              <UserCheck className="w-5 h-5 text-indigo-600" />
-              <h2 className="text-base font-bold text-slate-800">{t('dashboard.verifiedProfileTitle')}</h2>
-            </div>
-            <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
-              <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 font-semibold border border-slate-200">
-                {t('common.trackingId')}: <span className="text-slate-900">{state.id || DEFAULT_TRACKING_ID}</span>
-              </span>
-              <span className="px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200">
-                {t('common.verificationNumber')}: <span className="text-indigo-900">{state.verificationNumber || DEFAULT_VERIFICATION_NUMBER}</span>
-              </span>
-            </div>
+          <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-100">
+            <UserCheck className="w-5 h-5 text-indigo-600" />
+            <h2 className="text-base font-bold text-slate-800">{t('dashboard.verifiedProfileTitle')}</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-4 gap-x-6 text-xs">
-            <div>
-              <span className="text-slate-400 font-medium block">{t('dashboard.caseTrackingId')}</span>
-              <span className="text-slate-800 font-bold font-mono text-sm">{state.id || DEFAULT_TRACKING_ID}</span>
-            </div>
-            <div>
-              <span className="text-slate-400 font-medium block">{t('common.verificationNumber')}</span>
-              <span className="text-slate-800 font-bold font-mono text-sm">{state.verificationNumber || DEFAULT_VERIFICATION_NUMBER}</span>
-            </div>
             <div>
               <span className="text-slate-400 font-medium block">{t('dashboard.fullName')}</span>
               <span className="text-slate-800 font-bold text-sm">{state.incidentInfo.fullName}</span>
